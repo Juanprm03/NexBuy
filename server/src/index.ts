@@ -1,7 +1,8 @@
 import express, { Application } from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import cors from 'cors'
+import cors from 'cors';
+import router from './routes/user';
 
 
 const app: Application = express();
@@ -12,9 +13,8 @@ app.use(express.json());
 app.use(cors());
 
 // Routes
-app.get('/api/v1', (req, res) =>{
-    res.send('Welcome to NexBuy server')
-})
+app.use('/api/users', router);
+
 
 // Puerto y URL of database
 const port: string | number = process.env.PORT || 5000;
