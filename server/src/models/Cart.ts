@@ -8,7 +8,6 @@ interface IProduct {
 
 // Define the TypeScript interface for the cart
 interface ICart extends Document {
-    id: number;
     userid: number;
     products: IProduct[];
 }
@@ -24,7 +23,6 @@ const ProductSchema = new Schema<IProduct>({
 );
 
 const CartSchema = new Schema<ICart>({
-    id: { type: Number, required: true },
     userid: { type: Number, required: true},
     products: { type: [ProductSchema], required:true}
 })

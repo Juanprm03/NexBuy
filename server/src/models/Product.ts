@@ -1,34 +1,31 @@
-import { Schema, model, Document } from 'mongoose';
+import { Schema, model, Document, models } from 'mongoose';
 
-// Define the TypeScript interface for the product
+// Define la interfaz TypeScript para el producto
 interface IProduct extends Document {
-    id: number;
     title: string;
     description: string;
     imageUrl: string;
-    createdAt: Date;
-    updatedAt: Date;
     categories: string[];
     size: string;
     color: string;
     price: number;
+    createdAt: Date;
+    updatedAt: Date;
 }
 
-// Define the Mongoose schema for the product
+// Define el esquema de Mongoose para el producto
 const ProductSchema = new Schema<IProduct>({
-    id: { type: Number, required: true },
-    title: { type: String, required: true, unique:true },
+    title: { type: String, required: true, unique: true },
     description: { type: String, required: true },
     imageUrl: { type: String, required: true },
     categories: { type: [String] },
     size: { type: String },
-    color: { type: String},
-    price: { type: Number, required: true}
+    color: { type: String },
+    price: { type: Number, required: true }
 },
-    {timestamps: true}
-);
+{ timestamps: true });
 
-// Create the Mongoose model based on the schema
-const Product = model<IProduct>('User', ProductSchema);
+// Verifica si el modelo ya está definido antes de definirlo nuevamente
+const Product = models.Product || model<IProduct>('Product', ProductSchema);
 
 export default Product;

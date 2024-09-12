@@ -1,8 +1,7 @@
-import { Schema, model, Document } from 'mongoose';
+import { Schema, model, Document, models } from 'mongoose';
 
-// Define the TypeScript interface for the user
+// Define la interfaz TypeScript para el usuario
 interface IUser extends Document {
-    id: number;
     username: string;
     email: string;
     password: string;
@@ -11,18 +10,16 @@ interface IUser extends Document {
     isAdmin: boolean;
 }
 
-// Define the Mongoose schema for the user
+// Define el esquema de Mongoose para el usuario
 const UserSchema = new Schema<IUser>({
-    id: { type: Number, required: true },
     username: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    isAdmin: { type: Boolean, default: false}
+    isAdmin: { type: Boolean, default: false }
 },
-    {timestamps: true}
-);
+{ timestamps: true });
 
-//Create the Mongoose model based on the schema
-const User = model<IUser>('User', UserSchema);
+// Verifica si el modelo ya está definido antes de definirlo nuevamente
+const User = models.User || model<IUser>('User', UserSchema);
 
 export default User;
