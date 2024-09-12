@@ -1,8 +1,19 @@
-import express from 'express'; 
+import express from 'express';
 import User from '../models/User'; 
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+
+
+dotenv.config();
 
 const router = express.Router();
+const secretKey = process.env.JWT_SECRET ;
+
+// verifica si la clave secreta está definida en las variables de entorno 
+if (!secretKey) {
+    throw new Error('JWT_SECRET must be defined in the environment variables');
+}
 
 // Registro
 router.post('/register', async (req, res) => {
@@ -66,8 +77,14 @@ router.post('/login', async (req, res) => {
             return res.status(401).json('¡Credenciales incorrectas!');
         }
 
-        // Responde con el usuario si las credenciales son correctas
-        return res.status(200).json(user);
+        // Genera un token JWT
+        const accessToken = jwt.sign({
+            id: user._id,
+            isAdmin: user.isAdmin,
+        }, secretKey, { expiresIn: '1d'});
+
+        // Responde con el usuario y el token si las credenciales son correctas
+        return res.status(200).json({user, accessToken});
     } catch (err) {
         // Verifica si el error es una instancia de Error
         if (err instanceof Error) {
