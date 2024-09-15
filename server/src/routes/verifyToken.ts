@@ -36,7 +36,7 @@ const verifyTokenAndAuthorization = (req: Request, res: Response, next: NextFunc
     verifyToken(req, res, () => {
         // Verificar si el usuario tiene permiso para realizar la acción
         const user = (req as any).user; // Usar aserción de tipo para indicar que req.user existe
-        if (user.id === req.params.id || user.isAdmin) {
+        if (user.id === req. params.id || user.isAdmin) {
             next();
         } else {
             // si el usuario no tiene permiso, devuelve un error
@@ -45,4 +45,18 @@ const verifyTokenAndAuthorization = (req: Request, res: Response, next: NextFunc
     });
 };
 
-export default { verifyToken, verifyTokenAndAuthorization };
+// Middleware para verificar el token y la autorización del admin
+const verifyTokenAndAdmin = (req: Request, res: Response, next: NextFunction) => {
+    verifyToken(req, res, () => {
+        // Verificar si el usuario tiene permiso para realizar la acción
+        const user = (req as any).user; // Usar aserción de tipo para indicar que req.user existe
+        if (user.isAdmin) {
+            next();
+        } else {
+            // si el usuario no tiene permiso, devuelve un error
+            res.status(403).json('You aren\'t allowed to do that');
+        }
+    });
+};
+
+export default { verifyToken, verifyTokenAndAuthorization, verifyTokenAndAdmin };
