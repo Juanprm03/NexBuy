@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import userRouter from './routes/user';
 import authRouter from './routes/auth';
+import productRouter from './routes/product';
 
 dotenv.config();
 const app: Application = express();
@@ -16,6 +17,7 @@ app.use(cors());
 // Routes
 app.use('/api/users', userRouter);
 app.use('/api/auth', authRouter);
+app.use('/api/products', productRouter);
 
 
 // Puerto y URL of database

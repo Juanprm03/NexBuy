@@ -1,23 +1,23 @@
 import multer from 'multer';
-import { CloudinaryStorage } from 'multer-storage-cloudinary';
-import cloudinary from './cloudinaryConfig';
+import path from 'path';
+import fs from 'fs';
 
-// Define the parameters for the Cloudinary storage
-interface CloudinaryStorageParams {
-    folder: string;
-    allowed_formats: string[];
+// Crear el directorio 'uploads' si no existe
+const uploadDir = path.join(__dirname, '..', 'uploads');
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir);
 }
 
-// Create a new Cloudinary storage instance
-const storage = new CloudinaryStorage({
-  cloudinary: cloudinary,
-  params: {
-    folder: 'uploads', 
-    allowed_formats: ['jpg', 'png'],
-  } as CloudinaryStorageParams,
+// Configuración de almacenamiento de multer
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, uploadDir);
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`);
+  },
 });
 
-// Create a new Multer upload instance
 const upload = multer({ storage: storage });
 
 export default upload;
