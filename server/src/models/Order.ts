@@ -1,12 +1,12 @@
 import { Schema, model, Document } from 'mongoose';
 
-// Define the TypeScript interface for the product in the cart
+// Define la interfaz para el producto en el carrito
 interface IProduct {
     productId: string;
     quantity: number;
 }
 
-// Define the TypeScript interface for the cart
+// Define la interfaz para la orden
 interface IOrder extends Document {
     userId: string;
     products: IProduct[];
@@ -15,25 +15,27 @@ interface IOrder extends Document {
     status: string;
 }
 
-// Define the Mongoose schema for the product in the cart
+
+// Define el esquema de Mongoose para el producto en el carrito
 const ProductSchema = new Schema<IProduct>({
     productId: { type: String, required: true },
     quantity: { type: Number, default: 1}
     
    
-},
-    {timestamps: true}
+}
 );
 
+// Define el esquema de Mongoose para la orden
 const OrderSchema = new Schema<IOrder>({
     userId: { type: String, required: true},
     products: { type: [ProductSchema], required:true},
     amount: { type: Number, required: true},
     address: { type: Object, required: true},
-    status: { type: String, default: 'Pending'}
-})
+    status: { type: String, default: 'Pending'},
+    
+}, {timestamps:true},)
 
-// Create the Mongoose model based on the schema
+// Crea el modelo de Mongoose basado en el esquema
 const Order = model<IOrder>('Order', OrderSchema);
 
 export default Order;
