@@ -10,42 +10,20 @@ const router = express.Router();
 const { verifyToken, verifyTokenAndAuthorization, verifyTokenAndAdmin } = authMiddleware; // Desestructura los métodos de autenticación
 
 // POST /upload image
-router.post('/', verifyToken, upload.single('image'), async (req: Request, res: Response) => {
+router.post('/', verifyToken, async (req: Request, res: Response) => {
   try {
     // Desestructura los campos del cuerpo de la solicitud
-    const { title, description, categories, size, color, price } = req.body;
-    const filePath = req.file?.path; // Obtiene la ruta del archivo subido
+    const { userId, products } = req.body;
     
-    // Verifica si no se ha subido ningún archivo
-    if (!filePath) {
-      return res.status(400).json({ message: 'No file uploaded' });
+     // Verificar que los campos requeridos están presentes
+     if (!userId || !products) {
+      return res.status(400).json({ message: 'User ID and products are required.' });
     }
-
-    // Verificar que los campos requeridos están presentes
-    if (!title || !description || !price) {
-      return res.status(400).json({ message: 'Title, description, and price are required.' });
-    }
-
-    // Convertir la cadena de categorías en un array
-    const categoriesArray = categories.split(',').map((cat: string) => cat.trim());
-
-    // Subir la imagen a Cloudinary
-    const result = await cloudinary.uploader.upload(filePath, {
-      folder: 'nexbuy',
-    });
-
-    // Eliminar el archivo local después de subirlo a Cloudinary
-    fs.unlinkSync(filePath);
     
     // Crea un nuevo carrito con los datos proporcionados
     const newCart = new Cart({
-      title,
-      description,
-      categories: categoriesArray,
-      size,
-      color,
-      price,
-      imageUrl: result.secure_url,
+      userId,
+      products,
     });
 
     await newCart.save();
