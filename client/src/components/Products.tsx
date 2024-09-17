@@ -17,6 +17,7 @@ const Products = () => {
     const fetchProducts = async () => {
       try {
         const response = await axios.get('http://localhost:5000/api/products');
+        console.log('Fetched products:', response.data); // Agregar console.log para verificar los datos
         setProducts(response.data);
       } catch (error) {
         console.error('Error fetching products:', error);
@@ -26,10 +27,14 @@ const Products = () => {
     fetchProducts();
   }, []);
 
+  useEffect(() => {
+    console.log('Products state updated:', products); // Agregar console.log para verificar el estado
+  }, [products]);
+
   return (
-    <div>
-      <h1>Products</h1>
-      <ul>
+    <div className="container mx-auto p-4">
+      <h1 className="text-3xl font-bold mb-4 text-center">Products</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {products.map(product => (
           <Product
             key={product.id}
@@ -40,7 +45,7 @@ const Products = () => {
             imageUrl={product.imageUrl}
           />
         ))}
-      </ul>
+      </div>
     </div>
   );
 }

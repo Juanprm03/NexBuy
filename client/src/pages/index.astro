@@ -5,8 +5,9 @@ import App from '../App';
 
 <Layout title="NexBuy">
     <main>
-
-        <App client:load />
+        <client:only>
+            <App client:load />
+        </client:only>
     </main>
 </Layout>
 
