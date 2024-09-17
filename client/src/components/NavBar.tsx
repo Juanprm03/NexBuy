@@ -10,11 +10,11 @@ const NavBar = () => {
           EN
         </div>
         <div className="flex-1 flex justify-center">
-          <div className="flex items-center bg-black text-white rounded p-1 mx-6">
+          <div className="flex items-center bg-black text-white rounded-full p-1 mx-6">
             <input
               type="text"
               placeholder="Search..."
-              className="outline-none px-4 py-2 bg-black text-white rounded-b-full w-64"
+              className="outline-none px-4 py-2 bg-black rounded-full text-white w-64"
             />
             <FaSearch className="text-white" />
           </div>
